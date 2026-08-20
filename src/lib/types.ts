@@ -2,6 +2,15 @@ export type WorkStyle = "remote" | "hybrid" | "onsite";
 
 export type PitchStatus = "pending" | "interested" | "maybe" | "passed";
 
+export interface PublicCandidateProfile {
+  public_id: string;
+  name: string;
+  title: string;
+  location: string;
+  headline: string;
+  open_to_offers: boolean;
+}
+
 export interface ExperienceEntry {
   role: string;
   company: string;
@@ -15,6 +24,7 @@ export interface PortfolioItem {
   url: string;
 }
 
+// Demo-only shape used by clearly labeled illustrative examples.
 export interface Candidate {
   id: string;
   name: string;
@@ -42,6 +52,7 @@ export interface Candidate {
   pitchCount: number;
 }
 
+// Demo-only shape used by clearly labeled illustrative examples.
 export interface Pitch {
   id: string;
   candidateId: string;
