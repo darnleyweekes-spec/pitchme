@@ -3,15 +3,13 @@ import { candidates } from "@/lib/data";
 
 export const dynamic = "force-static";
 
-const siteUrl = "https://pitchme.example.com";
+const siteUrl = "https://pitchme-418.pages.dev";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
     "/talent",
     "/pitch/new",
-    "/dashboard/candidate",
-    "/dashboard/employer",
     "/pricing",
     "/about",
   ].map((path) => ({
