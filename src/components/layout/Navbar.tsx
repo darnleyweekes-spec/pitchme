@@ -57,10 +57,11 @@ export function Navbar() {
       <Container className="flex h-16 items-center justify-between">
         <Link
           href="/"
-          className="font-display text-xl font-semibold tracking-tight text-ink"
+          className="flex items-baseline gap-2 text-ink"
           onClick={() => setOpen(false)}
         >
-          PitchMe
+          <span className="font-display text-xl font-semibold tracking-tight">PitchMe</span>
+          <span className="hidden text-[10px] font-semibold uppercase tracking-[0.12em] text-muted sm:inline">by Prime24 AI</span>
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
@@ -81,27 +82,13 @@ export function Navbar() {
         <div className="hidden items-center gap-3 md:flex">
           {signedIn ? (
             <>
-              <Link
-                href="/dashboard/candidate"
-                className="text-sm font-medium text-ink-soft transition-colors hover:text-ink"
-              >
-                Dashboard
-              </Link>
-              <Button type="button" size="md" onClick={signOut}>
-                Log out
-              </Button>
+              <Link href="/dashboard/candidate" className="text-sm font-medium text-ink-soft transition-colors hover:text-ink">Dashboard</Link>
+              <Button type="button" size="md" onClick={signOut}>Log out</Button>
             </>
           ) : (
             <>
-              <Link
-                href="/login"
-                className="text-sm font-medium text-ink-soft transition-colors hover:text-ink"
-              >
-                Log in
-              </Link>
-              <Button href="/login" size="md">
-                Create My Profile
-              </Button>
+              <Link href="/login" className="text-sm font-medium text-ink-soft transition-colors hover:text-ink">Log in</Link>
+              <Button href="/login" size="md">Create My Profile</Button>
             </>
           )}
         </div>
@@ -133,29 +120,13 @@ export function Navbar() {
             <div className="mt-2 flex flex-col gap-2 border-t border-line pt-4">
               {signedIn ? (
                 <>
-                  <Link
-                    href="/dashboard/candidate"
-                    onClick={() => setOpen(false)}
-                    className="px-2 py-2 text-sm font-medium text-ink-soft"
-                  >
-                    Dashboard
-                  </Link>
-                  <Button type="button" className="w-full" onClick={signOut}>
-                    Log out
-                  </Button>
+                  <Link href="/dashboard/candidate" onClick={() => setOpen(false)} className="px-2 py-2 text-sm font-medium text-ink-soft">Dashboard</Link>
+                  <Button type="button" className="w-full" onClick={signOut}>Log out</Button>
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/login"
-                    onClick={() => setOpen(false)}
-                    className="px-2 py-2 text-sm font-medium text-ink-soft"
-                  >
-                    Log in
-                  </Link>
-                  <Button href="/login" className="w-full" onClick={() => setOpen(false)}>
-                    Create My Profile
-                  </Button>
+                  <Link href="/login" onClick={() => setOpen(false)} className="px-2 py-2 text-sm font-medium text-ink-soft">Log in</Link>
+                  <Button href="/login" className="w-full" onClick={() => setOpen(false)}>Create My Profile</Button>
                 </>
               )}
             </div>
