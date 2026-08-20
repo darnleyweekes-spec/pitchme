@@ -20,31 +20,31 @@ const siteUrl = "https://pitchme.prime24ai.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "PitchMe — Stop applying. Start getting recruited.",
-    template: "%s | PitchMe",
+    default: "PitchMe by Prime24 AI — Stop applying. Start getting recruited.",
+    template: "%s | PitchMe by Prime24 AI",
   },
   description:
-    "PitchMe reverses hiring. Create one profile, show what you can actually do, and let companies pitch you the opportunity — not the other way around.",
+    "PitchMe by Prime24 AI is an early-access reverse-recruiting marketplace where candidates control public visibility and employers send structured role pitches.",
   keywords: [
-    "recruiting platform",
     "reverse recruiting",
-    "hire without applications",
-    "candidate profile",
+    "candidate marketplace",
+    "structured job pitch",
     "talent marketplace",
+    "Prime24 AI",
   ],
   openGraph: {
-    title: "PitchMe — Stop applying. Start getting recruited.",
+    title: "PitchMe by Prime24 AI",
     description:
-      "Create your profile once. Show what you can actually do. Let companies pitch you the opportunity.",
+      "Real opt-in candidate profiles. Structured role pitches. Candidate-controlled visibility.",
     url: siteUrl,
-    siteName: "PitchMe",
+    siteName: "PitchMe by Prime24 AI",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PitchMe — Stop applying. Start getting recruited.",
+    title: "PitchMe by Prime24 AI",
     description:
-      "Create your profile once. Show what you can actually do. Let companies pitch you the opportunity.",
+      "Real opt-in candidate profiles. Structured role pitches. Candidate-controlled visibility.",
   },
   icons: {
     icon: "/favicon.ico",
