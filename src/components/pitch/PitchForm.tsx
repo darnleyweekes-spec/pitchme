@@ -51,6 +51,7 @@ export function PitchForm() {
   const [candidates, setCandidates] = useState<PublicCandidateProfile[]>([]);
   const [form, setForm] = useState<FormState>(initialForm);
   const [loading, setLoading] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -59,19 +60,25 @@ export function PitchForm() {
   useEffect(() => {
     let cancelled = false;
 
-    async function loadCandidates() {
+    async function loadCandidatesAndSession() {
       try {
         const supabase = getSupabaseClient();
-        const { data, error } = await supabase
-          .from("public_candidate_profiles")
-          .select("public_id,name,title,location,headline,open_to_offers")
-          .eq("open_to_offers", true)
-          .order("name", { ascending: true });
+        const [candidateResult, sessionResult] = await Promise.all([
+          supabase
+            .from("public_candidate_profiles")
+            .select("public_id,name,title,location,headline,open_to_offers")
+            .eq("open_to_offers", true)
+            .order("name", { ascending: true }),
+          supabase.auth.getSession(),
+        ]);
 
-        if (error) throw error;
-        const available = (data ?? []) as PublicCandidateProfile[];
+        if (candidateResult.error) throw candidateResult.error;
+        if (sessionResult.error) throw sessionResult.error;
+
+        const available = (candidateResult.data ?? []) as PublicCandidateProfile[];
         if (!cancelled) {
           setCandidates(available);
+          setSignedIn(Boolean(sessionResult.data.session));
           if (available.some((candidate) => candidate.public_id === requestedCandidate)) {
             setForm((current) => ({ ...current, candidateId: requestedCandidate }));
           }
@@ -85,7 +92,7 @@ export function PitchForm() {
       }
     }
 
-    loadCandidates();
+    loadCandidatesAndSession();
     return () => {
       cancelled = true;
     };
@@ -118,6 +125,10 @@ export function PitchForm() {
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (!signedIn) {
+      setLoadError("Sign in with Google before sending a role pitch.");
+      return;
+    }
     if (!validate() || !selectedCandidate) return;
 
     setSending(true);
@@ -200,6 +211,21 @@ export function PitchForm() {
         <p className="font-medium text-ink">No candidates are accepting pitches yet.</p>
         <p className="mt-2 text-sm text-muted">Public demo profiles are not used as live recipients.</p>
         <Button href="/talent" variant="secondary" className="mt-5">Browse public profiles</Button>
+      </div>
+    );
+  }
+
+  if (!signedIn) {
+    const next = requestedCandidate
+      ? `/pitch/new?candidate=${encodeURIComponent(requestedCandidate)}`
+      : "/pitch/new";
+    return (
+      <div className="rounded-xl border border-line bg-surface p-7">
+        <h2 className="font-display text-2xl font-medium text-ink">Sign in before contacting a candidate</h2>
+        <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+          Google sign-in is required to send a live role pitch. This reduces anonymous spam and gives candidates a more accountable contact flow.
+        </p>
+        <Button href={`/login?next=${encodeURIComponent(next)}`} className="mt-5">Continue with Google</Button>
       </div>
     );
   }
