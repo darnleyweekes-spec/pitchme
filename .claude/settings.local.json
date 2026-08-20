@@ -1,0 +1,6 @@
+{
+  "enabledMcpjsonServers": [
+    "retellai-mcp-server"
+  ],
+  "enableAllProjectMcpServers": true
+}
