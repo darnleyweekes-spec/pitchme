@@ -4,27 +4,27 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 const steps = [
   {
     number: "01",
-    title: "Build one real profile",
+    title: "Build a concise profile",
     description:
-      "Skills, experience, portfolio, preferred roles, compensation expectations, and how you like to work. Once, not two hundred times.",
+      "Add your name, current title, location, and a headline that explains the work you do best.",
   },
   {
     number: "02",
-    title: "Companies search and discover you",
+    title: "Choose your visibility",
     description:
-      "Employers browse candidates by skill, experience, and availability — the same way you'd browse anything else worth finding.",
+      "Keep the profile private, or opt into Browse Talent. You can separately decide whether you're open to pitches.",
   },
   {
     number: "03",
-    title: "They pitch you the role",
+    title: "Employers pitch the role",
     description:
-      "A structured pitch: the job, the pay, why they picked you, and why you should care. Not a job posting — an offer to talk.",
+      "A pitch includes the role, compensation, work style, why you were selected, interview process, timeline, and contact email.",
   },
   {
     number: "04",
-    title: "You decide what happens next",
+    title: "You decide",
     description:
-      "Mark it Interested, Maybe, or Pass. No ghosting, no forms, no fifteen-question screener before anyone will talk to you.",
+      "The opportunity lands in your private dashboard, where you can mark Interested, Maybe, or Pass.",
   },
 ];
 
@@ -34,21 +34,15 @@ export function HowItWorks() {
       <Container className="py-16 sm:py-20">
         <SectionHeading
           eyebrow="How it works"
-          title="Four steps. You're in control of every one."
+          title="Four steps. Candidate-controlled from the start."
         />
 
         <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step) => (
             <div key={step.number} className="bg-surface p-6 sm:p-7">
-              <span className="font-display text-3xl font-medium text-line">
-                {step.number}
-              </span>
-              <h3 className="mt-4 text-base font-semibold text-ink">
-                {step.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {step.description}
-              </p>
+              <span className="font-display text-3xl font-medium text-line">{step.number}</span>
+              <h3 className="mt-4 text-base font-semibold text-ink">{step.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{step.description}</p>
             </div>
           ))}
         </div>
