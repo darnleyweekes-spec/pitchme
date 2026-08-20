@@ -21,6 +21,7 @@ type PitchStatus = "pending" | "interested" | "maybe" | "passed";
 
 type Pitch = {
   id: string;
+  sender_email: string | null;
   company_name: string;
   job_title: string;
   message: string;
@@ -87,7 +88,7 @@ export default function CandidateDashboardPage() {
 
         const { data: pitchData, error: pitchError } = await supabase
           .from("pitches")
-          .select("id,company_name,job_title,message,status,created_at")
+          .select("id,sender_email,company_name,job_title,message,status,created_at")
           .eq("recipient_user_id", user.id)
           .order("created_at", { ascending: false });
 
@@ -212,9 +213,7 @@ export default function CandidateDashboardPage() {
           <div className="mb-5">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">Your profile</p>
             <h2 className="mt-2 font-display text-2xl font-medium">Candidate profile</h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-              Your profile stays private until you explicitly choose to publish it.
-            </p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">Your profile stays private until you explicitly choose to publish it.</p>
           </div>
 
           <div className="space-y-4">
@@ -243,7 +242,7 @@ export default function CandidateDashboardPage() {
                 checked={profile.open_to_offers}
                 onChange={(open_to_offers) => updateProfile({ open_to_offers })}
                 label="Open to offers"
-                description="When enabled and your profile is public, employers can send opportunities to your private dashboard."
+                description="When enabled and your profile is public, signed-in users can send opportunities to your private dashboard."
               />
             </div>
           </div>
@@ -253,9 +252,7 @@ export default function CandidateDashboardPage() {
               {saving ? "Saving…" : "Save profile"}
             </Button>
             {profile.is_public && (
-              <Button href={`/talent/profile?id=${encodeURIComponent(profile.public_id)}`} variant="secondary" className="w-full sm:w-auto">
-                View public profile
-              </Button>
+              <Button href={`/talent/profile?id=${encodeURIComponent(profile.public_id)}`} variant="secondary" className="w-full sm:w-auto">View public profile</Button>
             )}
             {saveMessage && <p className="text-sm font-medium text-ink">{saveMessage}</p>}
           </div>
@@ -273,9 +270,7 @@ export default function CandidateDashboardPage() {
           {pitches.length === 0 ? (
             <div className="rounded-xl border border-dashed border-line bg-surface p-10 text-center">
               <p className="font-medium text-ink">No pitches yet.</p>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-soft">
-                Publish your profile and keep Open to offers enabled if you want employers to send opportunities.
-              </p>
+              <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-soft">Publish your profile and keep Open to offers enabled if you want signed-in employers or recruiters to send opportunities.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -285,6 +280,9 @@ export default function CandidateDashboardPage() {
                     <div>
                       <p className="text-sm font-semibold text-accent">{pitch.company_name}</p>
                       <h3 className="mt-1 font-display text-xl font-medium text-ink">{pitch.job_title}</h3>
+                      {pitch.sender_email && (
+                        <p className="mt-1 text-xs text-muted">Google-verified sender account: {pitch.sender_email}</p>
+                      )}
                     </div>
                     <span className="text-xs text-muted">{new Date(pitch.created_at).toLocaleDateString()}</span>
                   </div>
@@ -315,17 +313,7 @@ export default function CandidateDashboardPage() {
   );
 }
 
-function Field({
-  label,
-  value,
-  onChange,
-  placeholder,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-}) {
+function Field({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (value: string) => void; placeholder?: string }) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-sm font-medium text-ink">{label}</span>
@@ -339,25 +327,10 @@ function Field({
   );
 }
 
-function Toggle({
-  checked,
-  onChange,
-  label,
-  description,
-}: {
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-  label: string;
-  description: string;
-}) {
+function Toggle({ checked, onChange, label, description }: { checked: boolean; onChange: (checked: boolean) => void; label: string; description: string }) {
   return (
     <label className="flex cursor-pointer items-start gap-3">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        className="mt-1 h-4 w-4 accent-current"
-      />
+      <input type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} className="mt-1 h-4 w-4 accent-current" />
       <span>
         <span className="block text-sm font-medium text-ink">{label}</span>
         <span className="mt-1 block text-xs leading-relaxed text-muted">{description}</span>
