@@ -9,7 +9,7 @@ export function Hero() {
       <Container className="grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-28">
         <div>
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 text-xs font-medium uppercase tracking-[0.1em] text-ink-soft">
-            Built for people done applying
+            Early access · founding candidates &amp; employers
           </p>
           <h1 className="font-display text-4xl font-medium leading-[1.08] text-balance sm:text-5xl lg:text-6xl">
             Stop applying.
@@ -17,19 +17,19 @@ export function Hero() {
             Start getting recruited.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-            You shouldn&apos;t have to apply to 200 jobs to find one company that values your work.
+            Create one concise profile. Keep it private until you&apos;re ready. Opt into Browse Talent when you want employers to make the first case for the opportunity.
           </p>
-          <p className="mt-4 max-w-xl text-lg leading-relaxed text-ink-soft">
-            Create your profile once. Choose whether it is public. Let companies tell you why they&apos;re worth your time.
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
+            Live marketplace results contain real, opted-in PitchMe users only. Fictional examples are labeled as samples.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Button href="/dashboard/candidate" size="lg">
-              Create My Profile
+              Join as a Founding Candidate
               <ArrowRight size={18} />
             </Button>
             <Button href="/talent" variant="secondary" size="lg">
-              Find Talent
+              Browse Talent
             </Button>
           </div>
 
