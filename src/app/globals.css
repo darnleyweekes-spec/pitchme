@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-paper: #faf8f3;
+  --color-ink: #14141a;
+  --color-ink-soft: #45454e;
+  --color-muted: #6b6b74;
+  --color-line: #e3e0d6;
+  --color-surface: #ffffff;
+  --color-accent: #c2410c;
+  --color-accent-ink: #fff7ed;
+  --color-accent-soft: #fdead9;
+  --color-positive: #15803d;
+  --color-positive-soft: #e7f3ea;
+  --color-caution: #92400e;
+  --color-caution-soft: #fdf1de;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--color-paper);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-muted: var(--color-muted);
+  --color-line: var(--color-line);
+  --color-surface: var(--color-surface);
+  --color-accent: var(--color-accent);
+  --color-accent-ink: var(--color-accent-ink);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-positive: var(--color-positive);
+  --color-positive-soft: var(--color-positive-soft);
+  --color-caution: var(--color-caution);
+  --color-caution-soft: var(--color-caution-soft);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-paper: #101012;
+    --color-ink: #f3f1ea;
+    --color-ink-soft: #cac7bd;
+    --color-muted: #92908a;
+    --color-line: #2a2a2d;
+    --color-surface: #17171a;
+    --color-accent: #f0703b;
+    --color-accent-ink: #1a0e06;
+    --color-accent-soft: #2a1810;
+    --color-positive: #4ade80;
+    --color-positive-soft: #10241a;
+    --color-caution: #f5b25b;
+    --color-caution-soft: #2a1f10;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
