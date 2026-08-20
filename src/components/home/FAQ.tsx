@@ -4,34 +4,34 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const faqs = [
   {
-    question: "Is PitchMe actually free for candidates?",
+    question: "Is PitchMe free for candidates?",
     answer:
-      "Yes, entirely. You'll never be charged to create a profile, receive pitches, or use the platform. We make money from companies, not from people looking for work.",
+      "Yes. Creating a candidate profile, controlling its visibility, receiving pitches, and responding Interested / Maybe / Pass are free in the current product.",
   },
   {
-    question: "How is this different from a job board?",
+    question: "Are the people in Browse Talent real?",
     answer:
-      "Job boards show you listings you have to apply to. PitchMe reverses the direction: companies search for candidates and send a structured pitch directly to you, with compensation and role details included from the start.",
+      "Yes. Browse Talent now shows only real PitchMe users who explicitly made their profile public. Illustrative examples elsewhere on the site are labeled as samples and are not mixed into live marketplace results.",
   },
   {
-    question: "Can I stay invisible while still employed?",
+    question: "Can I stay private while employed?",
     answer:
-      "Yes. You control your visibility and availability status independently. You can be discoverable to companies without appearing to actively be job hunting, and you can go fully private at any time.",
+      "Yes. Profiles start private. You can publish later, turn off Open to offers while remaining visible, or make your profile private again from your dashboard.",
   },
   {
     question: "What happens after I mark a pitch as Interested?",
     answer:
-      "The company is notified and can start a conversation directly with you. Nothing happens automatically — no calendar invites, no forwarded resume, no third parties added without your knowledge.",
+      "Your response is saved in your private dashboard. The current MVP does not yet provide a live employer response dashboard, so use the contact email included in the pitch to continue the conversation directly.",
   },
   {
-    question: "Do companies use AI to screen candidates on PitchMe?",
+    question: "What information does a company have to provide?",
     answer:
-      "Some do, for later interview stages — and every pitch is required to disclose upfront whether AI interviews are part of their process, before you respond.",
+      "The live pitch form requires the role, compensation or rate, work style, why they selected you, why the role is worth considering, interview process, hiring timeline, and a contact email.",
   },
   {
-    question: "What does it cost companies to send a pitch?",
+    question: "What does it cost companies?",
     answer:
-      "Employers pay a monthly subscription based on pitch volume, not per candidate contacted. See the Pricing page for current plans.",
+      "Candidate browsing and role pitching are in early access. A founding-employer pilot is available for teams that want onboarding and direct support while employer accounts and billing automation are still being built.",
   },
 ];
 
@@ -45,18 +45,14 @@ export function FAQ() {
           {faqs.map((faq) => (
             <details key={faq.question} className="group py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left">
-                <span className="text-base font-medium text-ink">
-                  {faq.question}
-                </span>
+                <span className="text-base font-medium text-ink">{faq.question}</span>
                 <Plus
                   size={18}
                   className="shrink-0 text-muted transition-transform duration-200 group-open:rotate-45"
                   aria-hidden
                 />
               </summary>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-                {faq.answer}
-              </p>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">{faq.answer}</p>
             </details>
           ))}
         </div>
