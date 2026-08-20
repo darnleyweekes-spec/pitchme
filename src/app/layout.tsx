@@ -15,7 +15,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://pitchme-418.pages.dev";
+const siteUrl = "https://pitchme.prime24ai.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
