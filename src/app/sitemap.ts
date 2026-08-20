@@ -3,7 +3,7 @@ import { candidates } from "@/lib/data";
 
 export const dynamic = "force-static";
 
-const siteUrl = "https://pitchme-418.pages.dev";
+const siteUrl = "https://pitchme.prime24ai.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
