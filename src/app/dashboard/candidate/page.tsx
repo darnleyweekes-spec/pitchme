@@ -28,6 +28,7 @@ type Pitch = {
 export default function CandidateDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -104,14 +105,21 @@ export default function CandidateDashboardPage() {
     };
   }, []);
 
+  function updateProfile(patch: Partial<Profile>) {
+    if (!profile) return;
+    setProfile({ ...profile, ...patch });
+    setSaveMessage(null);
+  }
+
   async function saveProfile() {
     if (!profile) return;
     setSaving(true);
+    setSaveMessage(null);
     setError(null);
 
     try {
       const supabase = getSupabaseClient();
-      const { error: updateError } = await supabase
+      const { data: savedProfile, error: updateError } = await supabase
         .from("candidate_profiles")
         .update({
           name: profile.name.trim(),
@@ -120,9 +128,13 @@ export default function CandidateDashboardPage() {
           headline: profile.headline.trim(),
           updated_at: new Date().toISOString(),
         })
-        .eq("user_id", profile.user_id);
+        .eq("user_id", profile.user_id)
+        .select("user_id,slug,name,title,location,headline")
+        .single();
 
       if (updateError) throw updateError;
+      setProfile(savedProfile as Profile);
+      setSaveMessage("Profile saved successfully.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to save your profile.");
     } finally {
@@ -190,14 +202,14 @@ export default function CandidateDashboardPage() {
           </div>
 
           <div className="space-y-4">
-            <Field label="Name" value={profile.name} onChange={(name) => setProfile({ ...profile, name })} />
-            <Field label="Current title" value={profile.title} onChange={(title) => setProfile({ ...profile, title })} placeholder="Senior Product Designer" />
-            <Field label="Location" value={profile.location} onChange={(location) => setProfile({ ...profile, location })} placeholder="Vancouver, WA" />
+            <Field label="Name" value={profile.name} onChange={(name) => updateProfile({ name })} />
+            <Field label="Current title" value={profile.title} onChange={(title) => updateProfile({ title })} placeholder="Senior Product Designer" />
+            <Field label="Location" value={profile.location} onChange={(location) => updateProfile({ location })} placeholder="Vancouver, WA" />
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-ink">Headline</span>
               <textarea
                 value={profile.headline}
-                onChange={(event) => setProfile({ ...profile, headline: event.target.value })}
+                onChange={(event) => updateProfile({ headline: event.target.value })}
                 rows={4}
                 placeholder="What should employers know about the work you do best?"
                 className="w-full rounded-md border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none transition focus:border-ink"
@@ -205,9 +217,12 @@ export default function CandidateDashboardPage() {
             </label>
           </div>
 
-          <Button type="button" onClick={saveProfile} disabled={saving} className="mt-5 w-full sm:w-auto">
-            {saving ? "Saving…" : "Save profile"}
-          </Button>
+          <div className="mt-5 flex flex-col items-start gap-2 sm:flex-row sm:items-center">
+            <Button type="button" onClick={saveProfile} disabled={saving} className="w-full sm:w-auto">
+              {saving ? "Saving…" : "Save profile"}
+            </Button>
+            {saveMessage && <p className="text-sm font-medium text-ink">{saveMessage}</p>}
+          </div>
         </section>
 
         <section>
