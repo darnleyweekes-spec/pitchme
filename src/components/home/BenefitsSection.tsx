@@ -4,7 +4,7 @@ import {
   UserCheck,
   Clock3,
   Search,
-  Filter,
+  Eye,
   MessageSquareText,
   Target,
 } from "lucide-react";
@@ -15,46 +15,46 @@ import { Button } from "@/components/ui/Button";
 const candidateBenefits = [
   {
     icon: ShieldCheck,
-    title: "Skip the application queue",
-    description: "One profile replaces every résumé upload and cover letter you'll ever write again.",
+    title: "Private by default",
+    description: "Your profile does not enter Browse Talent until you explicitly publish it.",
   },
   {
     icon: Wallet,
-    title: "Compensation up front",
-    description: "Every pitch includes real numbers before you spend a minute on a call.",
+    title: "Compensation in the pitch",
+    description: "Employers must enter compensation or rate information before sending an opportunity.",
   },
   {
     icon: UserCheck,
-    title: "Companies explain themselves",
-    description: "Each pitch tells you why they picked you and why you should care — not the reverse.",
+    title: "You control availability",
+    description: "Keep a public profile while turning off new pitches, or make the profile private entirely.",
   },
   {
     icon: Clock3,
-    title: "You set the pace",
-    description: "Mark availability, respond when you want, and never chase a recruiter for status.",
+    title: "Simple responses",
+    description: "Review opportunities in your private dashboard and mark Interested, Maybe, or Pass.",
   },
 ];
 
 const employerBenefits = [
   {
     icon: Search,
-    title: "Search, don't post and pray",
-    description: "Filter by skill, experience, comp range, and availability to find who you actually need.",
+    title: "Browse real opt-in profiles",
+    description: "Live search results come from real PitchMe users who chose to publish their profiles.",
   },
   {
-    icon: Filter,
-    title: "See real work, not keywords",
-    description: "Portfolios and experience are visible up front — no résumé-parsing guesswork.",
+    icon: Eye,
+    title: "Only genuine profile fields",
+    description: "The marketplace displays only information candidates actually entered — no invented résumé details.",
   },
   {
     icon: MessageSquareText,
-    title: "Lead with your pitch",
-    description: "A structured format keeps you honest about role, pay, and process before you reach out.",
+    title: "Lead with a structured pitch",
+    description: "Send the role, pay, work style, process, timeline, and a specific reason for reaching out.",
   },
   {
     icon: Target,
-    title: "Reach candidates who aren't job-hunting",
-    description: "The best people are rarely applying anywhere. This is how you find them anyway.",
+    title: "Reach people open to hearing from you",
+    description: "The pitch form only lists public candidates who currently have Open to offers enabled.",
   },
 ];
 
@@ -64,7 +64,7 @@ export function BenefitsSection() {
       <Container className="py-16 sm:py-20">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-10">
           <div>
-            <SectionHeading eyebrow="For candidates" title="Built around your time, not a recruiter's pipeline." />
+            <SectionHeading eyebrow="For candidates" title="Control what employers can see and when they can reach you." />
             <ul className="mt-8 space-y-6">
               {candidateBenefits.map(({ icon: Icon, title, description }) => (
                 <li key={title} className="flex gap-4">
@@ -73,20 +73,16 @@ export function BenefitsSection() {
                   </span>
                   <div>
                     <h3 className="text-sm font-semibold text-ink">{title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-muted">
-                      {description}
-                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted">{description}</p>
                   </div>
                 </li>
               ))}
             </ul>
-            <Button href="/dashboard/candidate" variant="secondary" className="mt-8">
-              Create My Profile
-            </Button>
+            <Button href="/dashboard/candidate" variant="secondary" className="mt-8">Create My Profile</Button>
           </div>
 
           <div className="border-t border-line pt-16 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
-            <SectionHeading eyebrow="For employers" title="Find people who aren't in anyone's applicant pool." />
+            <SectionHeading eyebrow="For employers" title="Start with people who chose to be discoverable." />
             <ul className="mt-8 space-y-6">
               {employerBenefits.map(({ icon: Icon, title, description }) => (
                 <li key={title} className="flex gap-4">
@@ -95,16 +91,12 @@ export function BenefitsSection() {
                   </span>
                   <div>
                     <h3 className="text-sm font-semibold text-ink">{title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-muted">
-                      {description}
-                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted">{description}</p>
                   </div>
                 </li>
               ))}
             </ul>
-            <Button href="/talent" variant="secondary" className="mt-8">
-              Find Talent
-            </Button>
+            <Button href="/talent" variant="secondary" className="mt-8">Find Talent</Button>
           </div>
         </div>
       </Container>
