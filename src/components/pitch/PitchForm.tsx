@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Send, CircleCheck } from "lucide-react";
-import type { Candidate, Pitch, WorkStyle } from "@/lib/types";
+import { CircleCheck, Send } from "lucide-react";
+import type { PublicCandidateProfile, WorkStyle } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
-import { PitchCard } from "@/components/pitch/PitchCard";
-import { DynamicListField } from "@/components/pitch/DynamicListField";
-import { cn } from "@/lib/utils";
+import { getSupabaseClient } from "@/lib/supabase-browser";
+
+const fieldClasses =
+  "w-full rounded-md border border-line bg-surface px-3 py-2.5 text-sm text-ink placeholder:text-muted focus:border-ink focus:outline-none";
+const labelClasses = "block text-sm font-medium text-ink";
 
 const workStyleOptions: { value: WorkStyle; label: string }[] = [
   { value: "remote", label: "Remote" },
@@ -15,429 +17,259 @@ const workStyleOptions: { value: WorkStyle; label: string }[] = [
   { value: "onsite", label: "On-site" },
 ];
 
-const fieldClasses =
-  "w-full rounded-md border border-line bg-surface px-3 py-2.5 text-sm text-ink placeholder:text-muted focus:border-ink focus:outline-none";
-const labelClasses = "block text-sm font-medium text-ink";
-
-interface FormState {
+type FormState = {
   candidateId: string;
   companyName: string;
-  companyBlurb: string;
+  contactEmail: string;
   jobTitle: string;
-  compMin: string;
-  compMax: string;
-  compPeriod: "year" | "hour";
+  compensation: string;
   workStyle: WorkStyle;
-  responsibilities: string[];
   whySelected: string;
   whyJoin: string;
-  interviewStages: string[];
-  aiInterviews: "yes" | "no" | "";
+  interviewProcess: string;
   hiringTimeline: string;
-  benefits: string[];
-  equity: string;
-}
+  benefits: string;
+};
 
-const initialState = (candidateId: string): FormState => ({
-  candidateId,
+const initialForm: FormState = {
+  candidateId: "",
   companyName: "",
-  companyBlurb: "",
+  contactEmail: "",
   jobTitle: "",
-  compMin: "",
-  compMax: "",
-  compPeriod: "year",
+  compensation: "",
   workStyle: "remote",
-  responsibilities: [],
   whySelected: "",
   whyJoin: "",
-  interviewStages: [],
-  aiInterviews: "",
+  interviewProcess: "",
   hiringTimeline: "",
-  benefits: [],
-  equity: "",
-});
+  benefits: "",
+};
 
-export function PitchForm({ candidates }: { candidates: Candidate[] }) {
+export function PitchForm() {
   const searchParams = useSearchParams();
-  const preselected = searchParams.get("candidate") ?? "";
-
-  const [form, setForm] = useState<FormState>(() =>
-    initialState(candidates.some((c) => c.id === preselected) ? preselected : ""),
-  );
+  const requestedCandidate = searchParams.get("candidate") ?? "";
+  const [candidates, setCandidates] = useState<PublicCandidateProfile[]>([]);
+  const [form, setForm] = useState<FormState>(initialForm);
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitted, setSubmitted] = useState<Pitch | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [sentTo, setSentTo] = useState<PublicCandidateProfile | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadCandidates() {
+      try {
+        const supabase = getSupabaseClient();
+        const { data, error } = await supabase
+          .from("public_candidate_profiles")
+          .select("public_id,name,title,location,headline,open_to_offers")
+          .eq("open_to_offers", true)
+          .order("name", { ascending: true });
+
+        if (error) throw error;
+        const available = (data ?? []) as PublicCandidateProfile[];
+        if (!cancelled) {
+          setCandidates(available);
+          if (available.some((candidate) => candidate.public_id === requestedCandidate)) {
+            setForm((current) => ({ ...current, candidateId: requestedCandidate }));
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setLoadError(err instanceof Error ? err.message : "Unable to load available candidates.");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadCandidates();
+    return () => {
+      cancelled = true;
+    };
+  }, [requestedCandidate]);
+
+  const selectedCandidate = useMemo(
+    () => candidates.find((candidate) => candidate.public_id === form.candidateId) ?? null,
+    [candidates, form.candidateId],
+  );
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
-    setForm((prev) => ({ ...prev, [key]: value }));
+    setForm((current) => ({ ...current, [key]: value }));
+    setErrors((current) => ({ ...current, [key]: "" }));
   }
 
-  function validate(): boolean {
+  function validate() {
     const next: Record<string, string> = {};
-    if (!form.candidateId) next.candidateId = "Choose a candidate to pitch.";
-    if (!form.companyName.trim()) next.companyName = "Company name is required.";
-    if (!form.jobTitle.trim()) next.jobTitle = "Job title is required.";
-    if (!form.compMin || !form.compMax) next.compensation = "Enter a salary or rate range.";
-    if (form.compMin && form.compMax && Number(form.compMin) > Number(form.compMax))
-      next.compensation = "Minimum can't be greater than maximum.";
-    if (form.responsibilities.length === 0)
-      next.responsibilities = "Add at least one responsibility.";
-    if (!form.whySelected.trim()) next.whySelected = "Tell them why you selected them.";
-    if (!form.whyJoin.trim()) next.whyJoin = "Tell them why they should join.";
-    if (form.interviewStages.length === 0)
-      next.interviewStages = "Add at least one interview stage.";
-    if (!form.aiInterviews) next.aiInterviews = "Let candidates know if AI is used.";
-    if (!form.hiringTimeline.trim()) next.hiringTimeline = "Expected timeline is required.";
-    if (form.benefits.length === 0) next.benefits = "Add at least one benefit.";
-
+    if (!selectedCandidate) next.candidateId = "Choose an available candidate.";
+    if (form.companyName.trim().length < 2) next.companyName = "Company name is required.";
+    if (!/^\S+@\S+\.\S+$/.test(form.contactEmail.trim())) next.contactEmail = "Enter a valid contact email.";
+    if (form.jobTitle.trim().length < 2) next.jobTitle = "Job title is required.";
+    if (!form.compensation.trim()) next.compensation = "Compensation or rate is required.";
+    if (form.whySelected.trim().length < 10) next.whySelected = "Be specific about why you selected this candidate.";
+    if (form.whyJoin.trim().length < 10) next.whyJoin = "Explain why this opportunity is worth their time.";
+    if (!form.interviewProcess.trim()) next.interviewProcess = "Describe the interview process.";
+    if (!form.hiringTimeline.trim()) next.hiringTimeline = "Add an expected hiring timeline.";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!validate()) return;
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    if (!validate() || !selectedCandidate) return;
 
-    const pitch: Pitch = {
-      id: "preview",
-      candidateId: form.candidateId,
-      companyName: form.companyName,
-      companyBlurb: form.companyBlurb || "Company details not provided.",
-      jobTitle: form.jobTitle,
-      compMin: Number(form.compMin),
-      compMax: Number(form.compMax),
-      compPeriod: form.compPeriod,
-      workStyle: form.workStyle,
-      responsibilities: form.responsibilities,
-      whySelected: form.whySelected,
-      whyJoin: form.whyJoin,
-      interviewStages: form.interviewStages,
-      aiInterviews: form.aiInterviews === "yes",
-      hiringTimeline: form.hiringTimeline,
-      benefits: form.benefits,
-      equity: form.equity || undefined,
-      status: "pending",
-      sentAt: new Date().toISOString().slice(0, 10),
-    };
+    setSending(true);
+    setLoadError(null);
 
-    setSubmitted(pitch);
+    const message = [
+      `Contact: ${form.contactEmail.trim()}`,
+      `Compensation: ${form.compensation.trim()}`,
+      `Work style: ${workStyleOptions.find((option) => option.value === form.workStyle)?.label ?? form.workStyle}`,
+      "",
+      `Why we selected you:\n${form.whySelected.trim()}`,
+      "",
+      `Why consider this role:\n${form.whyJoin.trim()}`,
+      "",
+      `Interview process:\n${form.interviewProcess.trim()}`,
+      `Hiring timeline: ${form.hiringTimeline.trim()}`,
+      form.benefits.trim() ? `Benefits / extras: ${form.benefits.trim()}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    try {
+      const supabase = getSupabaseClient();
+      const { error } = await supabase.rpc("send_pitch", {
+        p_public_id: selectedCandidate.public_id,
+        p_company_name: form.companyName.trim(),
+        p_job_title: form.jobTitle.trim(),
+        p_message: message,
+      });
+
+      if (error) throw error;
+      setSentTo(selectedCandidate);
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : "Unable to send this pitch.");
+    } finally {
+      setSending(false);
+    }
   }
 
-  if (submitted) {
-    const candidate = candidates.find((c) => c.id === submitted.candidateId);
+  if (loading) {
+    return <p className="text-sm text-ink-soft">Loading available candidates…</p>;
+  }
+
+  if (sentTo) {
     return (
-      <div>
-        <div className="flex items-start gap-3 rounded-lg border border-positive/30 bg-positive-soft p-5">
-          <CircleCheck size={20} className="mt-0.5 shrink-0 text-positive" aria-hidden />
+      <div className="rounded-xl border border-positive/30 bg-positive-soft p-6">
+        <div className="flex items-start gap-3">
+          <CircleCheck size={21} className="mt-0.5 shrink-0 text-positive" aria-hidden />
           <div>
-            <p className="font-medium text-ink">
-              Pitch ready to send{candidate ? ` to ${candidate.name}` : ""}.
-            </p>
-            <p className="mt-1 text-sm text-ink-soft">
-              This is a preview of exactly what they&apos;ll see in their dashboard.
+            <h2 className="font-display text-2xl font-medium text-ink">Pitch sent to {sentTo.name}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+              The opportunity is now in the candidate&apos;s private dashboard. Only real, opted-in candidates can receive pitches through this form.
             </p>
           </div>
         </div>
-
-        <div className="mt-6">
-          <PitchCard pitch={submitted} accent={candidate?.accent ?? "navy"} />
-        </div>
-
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-5 flex flex-wrap gap-3">
           <Button
             type="button"
-            variant="secondary"
             onClick={() => {
-              setSubmitted(null);
-              setForm(initialState(""));
+              setSentTo(null);
+              setForm(initialForm);
               setErrors({});
             }}
           >
             Send another pitch
           </Button>
-          {candidate && (
-            <Button href={`/talent/${candidate.id}`} variant="ghost">
-              View {candidate.name}&apos;s profile
-            </Button>
-          )}
+          <Button href="/talent" variant="secondary">Browse talent</Button>
         </div>
       </div>
     );
   }
 
+  if (loadError && candidates.length === 0) {
+    return <div className="rounded-lg border border-red-200 bg-red-50 p-5 text-sm text-red-800">{loadError}</div>;
+  }
+
+  if (candidates.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-line p-8 text-center">
+        <p className="font-medium text-ink">No candidates are accepting pitches yet.</p>
+        <p className="mt-2 text-sm text-muted">Public demo profiles are not used as live recipients.</p>
+        <Button href="/talent" variant="secondary" className="mt-5">Browse public profiles</Button>
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-10" noValidate>
-      <fieldset className="space-y-5">
-        <legend className="text-sm font-semibold uppercase tracking-[0.06em] text-muted">
-          Candidate
-        </legend>
-        <div>
-          <label htmlFor="candidateId" className={labelClasses}>
-            Who are you pitching?
-          </label>
-          <select
-            id="candidateId"
-            value={form.candidateId}
-            onChange={(e) => update("candidateId", e.target.value)}
-            className={cn(fieldClasses, "mt-1.5")}
-          >
-            <option value="">Select a candidate…</option>
-            {candidates.map((candidate) => (
-              <option key={candidate.id} value={candidate.id}>
-                {candidate.name} — {candidate.title}
-              </option>
-            ))}
-          </select>
-          <FieldError message={errors.candidateId} />
-        </div>
-      </fieldset>
+    <form onSubmit={handleSubmit} className="space-y-8" noValidate>
+      {loadError && <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">{loadError}</div>}
 
-      <fieldset className="space-y-5">
-        <legend className="text-sm font-semibold uppercase tracking-[0.06em] text-muted">
-          Your company
-        </legend>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div>
-            <label htmlFor="companyName" className={labelClasses}>
-              Company name
-            </label>
-            <input
-              id="companyName"
-              type="text"
-              value={form.companyName}
-              onChange={(e) => update("companyName", e.target.value)}
-              placeholder="Acme, Inc."
-              className={cn(fieldClasses, "mt-1.5")}
-            />
-            <FieldError message={errors.companyName} />
-          </div>
-          <div>
-            <label htmlFor="companyBlurb" className={labelClasses}>
-              One-line company description
-            </label>
-            <input
-              id="companyBlurb"
-              type="text"
-              value={form.companyBlurb}
-              onChange={(e) => update("companyBlurb", e.target.value)}
-              placeholder="Series B fintech, 80 employees"
-              className={cn(fieldClasses, "mt-1.5")}
-            />
-          </div>
-        </div>
-      </fieldset>
+      <div>
+        <label htmlFor="candidateId" className={labelClasses}>Who are you pitching?</label>
+        <select
+          id="candidateId"
+          value={form.candidateId}
+          onChange={(event) => update("candidateId", event.target.value)}
+          className={`${fieldClasses} mt-1.5`}
+        >
+          <option value="">Select a real candidate…</option>
+          {candidates.map((candidate) => (
+            <option key={candidate.public_id} value={candidate.public_id}>
+              {candidate.name} — {candidate.title}
+            </option>
+          ))}
+        </select>
+        <FieldError message={errors.candidateId} />
+      </div>
 
-      <fieldset className="space-y-5">
-        <legend className="text-sm font-semibold uppercase tracking-[0.06em] text-muted">
-          The role
-        </legend>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <TextField label="Company name" value={form.companyName} onChange={(value) => update("companyName", value)} placeholder="Your company" error={errors.companyName} />
+        <TextField label="Contact email" type="email" value={form.contactEmail} onChange={(value) => update("contactEmail", value)} placeholder="you@company.com" error={errors.contactEmail} />
+      </div>
 
-        <div>
-          <label htmlFor="jobTitle" className={labelClasses}>
-            Job title
-          </label>
-          <input
-            id="jobTitle"
-            type="text"
-            value={form.jobTitle}
-            onChange={(e) => update("jobTitle", e.target.value)}
-            placeholder="Senior Product Designer"
-            className={cn(fieldClasses, "mt-1.5")}
-          />
-          <FieldError message={errors.jobTitle} />
-        </div>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <TextField label="Role" value={form.jobTitle} onChange={(value) => update("jobTitle", value)} placeholder="Senior Product Designer" error={errors.jobTitle} />
+        <TextField label="Compensation / rate" value={form.compensation} onChange={(value) => update("compensation", value)} placeholder="$150k–$175k + equity" error={errors.compensation} />
+      </div>
 
-        <div>
-          <span className={labelClasses}>Salary / rate</span>
-          <div className="mt-1.5 grid grid-cols-2 gap-3 sm:grid-cols-[1fr_1fr_auto]">
-            <input
-              type="number"
-              inputMode="numeric"
-              min={0}
-              value={form.compMin}
-              onChange={(e) => update("compMin", e.target.value)}
-              placeholder="Min"
-              aria-label="Minimum compensation"
-              className={fieldClasses}
-            />
-            <input
-              type="number"
-              inputMode="numeric"
-              min={0}
-              value={form.compMax}
-              onChange={(e) => update("compMax", e.target.value)}
-              placeholder="Max"
-              aria-label="Maximum compensation"
-              className={fieldClasses}
-            />
-            <select
-              value={form.compPeriod}
-              onChange={(e) => update("compPeriod", e.target.value as "year" | "hour")}
-              aria-label="Compensation period"
-              className={cn(fieldClasses, "col-span-2 sm:col-span-1")}
+      <div>
+        <span className={labelClasses}>Work style</span>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {workStyleOptions.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => update("workStyle", option.value)}
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                form.workStyle === option.value ? "border-ink bg-ink text-paper" : "border-line text-ink-soft hover:border-ink"
+              }`}
             >
-              <option value="year">per year</option>
-              <option value="hour">per hour</option>
-            </select>
-          </div>
-          <FieldError message={errors.compensation} />
+              {option.label}
+            </button>
+          ))}
         </div>
+      </div>
 
-        <div>
-          <span className={labelClasses}>Work style</span>
-          <div className="mt-1.5 flex flex-wrap gap-2">
-            {workStyleOptions.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => update("workStyle", option.value)}
-                aria-pressed={form.workStyle === option.value}
-                className={cn(
-                  "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
-                  form.workStyle === option.value
-                    ? "border-ink bg-ink text-paper"
-                    : "border-line text-ink-soft hover:border-ink",
-                )}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </div>
+      <TextareaField label="Why did you select this candidate?" value={form.whySelected} onChange={(value) => update("whySelected", value)} placeholder="Reference something specific from their public profile." error={errors.whySelected} />
+      <TextareaField label="Why should they consider this role?" value={form.whyJoin} onChange={(value) => update("whyJoin", value)} placeholder="What makes the work, team, or upside worth their time?" error={errors.whyJoin} />
+      <TextareaField label="Interview process" value={form.interviewProcess} onChange={(value) => update("interviewProcess", value)} placeholder="Example: 30-minute intro, technical conversation, team interview. No take-home." error={errors.interviewProcess} />
 
-        <DynamicListField
-          label="Main responsibilities"
-          hint="Press Enter or Add after each one."
-          items={form.responsibilities}
-          onChange={(items) => update("responsibilities", items)}
-          placeholder="Own the roadmap for…"
-        />
-        <FieldError message={errors.responsibilities} />
-      </fieldset>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <TextField label="Hiring timeline" value={form.hiringTimeline} onChange={(value) => update("hiringTimeline", value)} placeholder="2–3 weeks" error={errors.hiringTimeline} />
+        <TextField label="Benefits / extras" value={form.benefits} onChange={(value) => update("benefits", value)} placeholder="Health, equity, learning budget" />
+      </div>
 
-      <fieldset className="space-y-5">
-        <legend className="text-sm font-semibold uppercase tracking-[0.06em] text-muted">
-          The pitch
-        </legend>
-
-        <div>
-          <label htmlFor="whySelected" className={labelClasses}>
-            Why did you select this candidate?
-          </label>
-          <textarea
-            id="whySelected"
-            rows={3}
-            value={form.whySelected}
-            onChange={(e) => update("whySelected", e.target.value)}
-            placeholder="Be specific — reference their actual work or experience."
-            className={cn(fieldClasses, "mt-1.5 resize-y")}
-          />
-          <FieldError message={errors.whySelected} />
-        </div>
-
-        <div>
-          <label htmlFor="whyJoin" className={labelClasses}>
-            Why should they work for you?
-          </label>
-          <textarea
-            id="whyJoin"
-            rows={3}
-            value={form.whyJoin}
-            onChange={(e) => update("whyJoin", e.target.value)}
-            placeholder="What makes this role and team worth their time?"
-            className={cn(fieldClasses, "mt-1.5 resize-y")}
-          />
-          <FieldError message={errors.whyJoin} />
-        </div>
-      </fieldset>
-
-      <fieldset className="space-y-5">
-        <legend className="text-sm font-semibold uppercase tracking-[0.06em] text-muted">
-          Process
-        </legend>
-
-        <DynamicListField
-          label="Interview stages"
-          hint="List each stage in order."
-          items={form.interviewStages}
-          onChange={(items) => update("interviewStages", items)}
-          placeholder="Recruiter screen"
-        />
-        <FieldError message={errors.interviewStages} />
-
-        <div>
-          <span className={labelClasses}>Are AI interviews used in your process?</span>
-          <div className="mt-1.5 flex gap-2">
-            {(["no", "yes"] as const).map((value) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => update("aiInterviews", value)}
-                aria-pressed={form.aiInterviews === value}
-                className={cn(
-                  "rounded-full border px-4 py-2 text-sm font-medium capitalize transition-colors",
-                  form.aiInterviews === value
-                    ? "border-ink bg-ink text-paper"
-                    : "border-line text-ink-soft hover:border-ink",
-                )}
-              >
-                {value}
-              </button>
-            ))}
-          </div>
-          <FieldError message={errors.aiInterviews} />
-        </div>
-
-        <div>
-          <label htmlFor="hiringTimeline" className={labelClasses}>
-            Expected hiring timeline
-          </label>
-          <input
-            id="hiringTimeline"
-            type="text"
-            value={form.hiringTimeline}
-            onChange={(e) => update("hiringTimeline", e.target.value)}
-            placeholder="e.g. 3–4 weeks"
-            className={cn(fieldClasses, "mt-1.5")}
-          />
-          <FieldError message={errors.hiringTimeline} />
-        </div>
-      </fieldset>
-
-      <fieldset className="space-y-5">
-        <legend className="text-sm font-semibold uppercase tracking-[0.06em] text-muted">
-          Compensation details
-        </legend>
-
-        <DynamicListField
-          label="Benefits"
-          items={form.benefits}
-          onChange={(items) => update("benefits", items)}
-          placeholder="Full health/dental/vision"
-        />
-        <FieldError message={errors.benefits} />
-
-        <div>
-          <label htmlFor="equity" className={labelClasses}>
-            Equity <span className="font-normal text-muted">(optional)</span>
-          </label>
-          <input
-            id="equity"
-            type="text"
-            value={form.equity}
-            onChange={(e) => update("equity", e.target.value)}
-            placeholder="e.g. 0.1%–0.3%"
-            className={cn(fieldClasses, "mt-1.5")}
-          />
-        </div>
-      </fieldset>
-
-      <div className="flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center">
-        <Button type="submit" size="lg">
+      <div className="border-t border-line pt-6">
+        <Button type="submit" size="lg" disabled={sending}>
           <Send size={17} />
-          Review pitch
+          {sending ? "Sending…" : "Send pitch"}
         </Button>
-        <p className="text-xs text-muted">
-          You&apos;ll see exactly what the candidate sees before anything sends.
+        <p className="mt-3 text-xs leading-relaxed text-muted">
+          This sends a real opportunity to the selected candidate. Do not include sensitive personal data or misleading claims.
         </p>
       </div>
     </form>
@@ -446,5 +278,63 @@ export function PitchForm({ candidates }: { candidates: Candidate[] }) {
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <p className="mt-1.5 text-xs font-medium text-accent">{message}</p>;
+  return <p className="mt-1.5 text-xs font-medium text-red-700">{message}</p>;
+}
+
+function TextField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  error,
+  type = "text",
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  error?: string;
+  type?: string;
+}) {
+  return (
+    <label className="block">
+      <span className={labelClasses}>{label}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        className={`${fieldClasses} mt-1.5`}
+      />
+      <FieldError message={error} />
+    </label>
+  );
+}
+
+function TextareaField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  error,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  error?: string;
+}) {
+  return (
+    <label className="block">
+      <span className={labelClasses}>{label}</span>
+      <textarea
+        rows={4}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        className={`${fieldClasses} mt-1.5 resize-y`}
+      />
+      <FieldError message={error} />
+    </label>
+  );
 }
