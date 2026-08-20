@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { getSupabaseClient } from "@/lib/supabase-browser";
@@ -12,23 +11,25 @@ function safeNext(value: string | null) {
 }
 
 export default function LoginPage() {
-  const searchParams = useSearchParams();
-  const nextPath = useMemo(() => safeNext(searchParams.get("next")), [searchParams]);
+  const [nextPath, setNextPath] = useState("/dashboard/candidate");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const resolvedNext = safeNext(new URL(window.location.href).searchParams.get("next"));
+    setNextPath(resolvedNext);
+
     try {
       const supabase = getSupabaseClient();
       supabase.auth.getSession().then(({ data }: any) => {
         if (data.session) {
-          window.location.replace(nextPath);
+          window.location.replace(resolvedNext);
         }
       });
     } catch {
       // The button below will surface a useful error if the client failed to load.
     }
-  }, [nextPath]);
+  }, []);
 
   async function signInWithGoogle() {
     setLoading(true);
