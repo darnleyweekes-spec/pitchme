@@ -17,12 +17,10 @@ export function Hero() {
             Start getting recruited.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-            You shouldn&apos;t have to apply to 200 jobs to find one company
-            that values your work.
+            You shouldn&apos;t have to apply to 200 jobs to find one company that values your work.
           </p>
           <p className="mt-4 max-w-xl text-lg leading-relaxed text-ink-soft">
-            Create your profile once. Show what you can actually do. Let
-            companies tell you why they&apos;re worth your time.
+            Create your profile once. Choose whether it is public. Let companies tell you why they&apos;re worth your time.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -36,31 +34,19 @@ export function Hero() {
           </div>
 
           <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted">
-            <span className="inline-flex items-center gap-1.5">
-              <CircleCheck size={16} className="text-positive" /> No cover
-              letters
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <CircleCheck size={16} className="text-positive" /> No
-              application black holes
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <CircleCheck size={16} className="text-positive" /> You choose
-              who responds
-            </span>
+            <span className="inline-flex items-center gap-1.5"><CircleCheck size={16} className="text-positive" /> Candidate-controlled visibility</span>
+            <span className="inline-flex items-center gap-1.5"><CircleCheck size={16} className="text-positive" /> Structured role pitches</span>
+            <span className="inline-flex items-center gap-1.5"><CircleCheck size={16} className="text-positive" /> Interested / Maybe / Pass</span>
           </div>
         </div>
 
         <div className="relative">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted">Illustrative sample — fictional company</p>
           <div className="rounded-lg border border-line bg-surface p-5 shadow-[0_1px_0_0_rgba(20,20,26,0.04)] sm:p-6">
             <div className="flex items-center justify-between border-b border-line pb-4">
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.08em] text-muted">
-                  New pitch
-                </p>
-                <p className="mt-1 font-display text-lg font-medium">
-                  Northlight Financial
-                </p>
+                <p className="text-xs font-medium uppercase tracking-[0.08em] text-muted">Sample pitch</p>
+                <p className="mt-1 font-display text-lg font-medium">Northlight Financial</p>
               </div>
               <Avatar name="Northlight Financial" accent="navy" size="md" />
             </div>
@@ -69,25 +55,17 @@ export function Hero() {
               <Row label="Role" value="Design Lead, Core Product" />
               <Row label="Compensation" value="$160,000 – $185,000 / yr" />
               <Row label="Work style" value="Hybrid — 3 days/week" />
-              <Row label="Interview stages" value="4 stages, no AI screening" />
+              <Row label="Interview process" value="4 stages" />
             </div>
 
             <div className="mt-5 rounded-md bg-accent-soft p-3.5 text-sm leading-relaxed text-ink-soft">
-              <span className="font-medium text-ink">Why you:</span> your
-              design-systems work is exactly the kind of thinking we need
-              right now.
+              <span className="font-medium text-ink">Why you:</span> your design-systems work is exactly the kind of thinking we need right now.
             </div>
 
             <div className="mt-5 flex gap-2">
-              <span className="flex-1 rounded-md bg-ink py-2.5 text-center text-sm font-medium text-paper">
-                Interested
-              </span>
-              <span className="flex-1 rounded-md border border-line py-2.5 text-center text-sm font-medium text-ink-soft">
-                Maybe
-              </span>
-              <span className="flex-1 rounded-md border border-line py-2.5 text-center text-sm font-medium text-ink-soft">
-                Pass
-              </span>
+              <span className="flex-1 rounded-md bg-ink py-2.5 text-center text-sm font-medium text-paper">Interested</span>
+              <span className="flex-1 rounded-md border border-line py-2.5 text-center text-sm font-medium text-ink-soft">Maybe</span>
+              <span className="flex-1 rounded-md border border-line py-2.5 text-center text-sm font-medium text-ink-soft">Pass</span>
             </div>
           </div>
         </div>
