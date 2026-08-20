@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Fraunces, Inter } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -14,7 +15,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://pitchme.example.com";
+const siteUrl = "https://pitchme-418.pages.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -57,6 +58,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
+        <Script
+          src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
+          strategy="beforeInteractive"
+        />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper"
