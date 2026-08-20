@@ -10,9 +10,9 @@ export function ExamplePitch() {
     <section className="border-b border-line">
       <Container className="py-16 sm:py-20">
         <SectionHeading
-          eyebrow="What a pitch looks like"
-          title="Every pitch follows the same structure — no guesswork, no vague 'exciting opportunity' emails."
-          description="Companies fill in the same eight fields every time. You always know the role, the pay, and why before you respond."
+          eyebrow="Illustrative sample"
+          title="What a clear role pitch can look like."
+          description="This sample uses fictional names and company details to demonstrate the format. Live marketplace profiles are real, opt-in PitchMe users."
         />
 
         <div className="mt-10">
@@ -22,7 +22,7 @@ export function ExamplePitch() {
             actions={
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted">
-                  This is exactly what Amara Osei saw in her dashboard.
+                  Sample only — not a real candidate, company, or submitted opportunity.
                 </p>
                 <div className="flex gap-2">
                   <span className="rounded-md bg-ink px-4 py-2 text-sm font-medium text-paper">
