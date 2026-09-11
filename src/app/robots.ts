@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://pitchme.example.com/sitemap.xml",
+    sitemap: "https://pitchme.prime24ai.com/sitemap.xml",
   };
 }
