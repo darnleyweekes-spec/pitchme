@@ -9,7 +9,7 @@ export function Hero() {
       <Container className="grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-28">
         <div>
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 text-xs font-medium uppercase tracking-[0.1em] text-ink-soft">
-            Early access · founding candidates &amp; employers
+            Reverse recruiting · candidate-controlled
           </p>
           <h1 className="font-display text-4xl font-medium leading-[1.08] text-balance sm:text-5xl lg:text-6xl">
             Stop applying.
@@ -17,25 +17,25 @@ export function Hero() {
             Start getting recruited.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-            Create one concise profile. Keep it private until you&apos;re ready. Opt into Browse Talent when you want employers to make the first case for the opportunity.
+            Create one profile. When you choose to be visible, interested employers have to show the role, compensation, interview process, timeline, and why they picked you before asking for your time.
           </p>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
-            Live marketplace results contain real, opted-in PitchMe users only. Fictional examples are labeled as samples.
+            Your profile starts private. Live marketplace results contain real, opted-in PitchMe users only. Fictional examples are labeled as samples.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Button href="/dashboard/candidate" size="lg">
-              Join as a Founding Candidate
+            <Button href="/candidates" size="lg">
+              Create Your Free Profile
               <ArrowRight size={18} />
             </Button>
-            <Button href="/talent" variant="secondary" size="lg">
-              Browse Talent
+            <Button href="/employers" variant="secondary" size="lg">
+              I&apos;m Hiring
             </Button>
           </div>
 
           <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted">
             <span className="inline-flex items-center gap-1.5"><CircleCheck size={16} className="text-positive" /> Candidate-controlled visibility</span>
-            <span className="inline-flex items-center gap-1.5"><CircleCheck size={16} className="text-positive" /> Structured role pitches</span>
+            <span className="inline-flex items-center gap-1.5"><CircleCheck size={16} className="text-positive" /> Compensation required</span>
             <span className="inline-flex items-center gap-1.5"><CircleCheck size={16} className="text-positive" /> Interested / Maybe / Pass</span>
           </div>
         </div>
