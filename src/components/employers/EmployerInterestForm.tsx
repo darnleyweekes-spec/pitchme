@@ -4,19 +4,18 @@ import { useEffect, useState, type FormEvent } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { getSupabaseClient } from "@/lib/supabase-browser";
+import {
+  readCampaignAttribution,
+  type CampaignAttributionData,
+} from "@/components/analytics/CampaignAttribution";
 
-type Attribution = {
-  utm_source: string | null;
-  utm_medium: string | null;
-  utm_campaign: string | null;
-  utm_content: string | null;
-};
-
-const emptyAttribution: Attribution = {
+const emptyAttribution: CampaignAttributionData = {
   utm_source: null,
   utm_medium: null,
   utm_campaign: null,
   utm_content: null,
+  landing_url: null,
+  referrer: null,
 };
 
 function field(formData: FormData, name: string) {
@@ -24,19 +23,29 @@ function field(formData: FormData, name: string) {
 }
 
 export function EmployerInterestForm() {
-  const [attribution, setAttribution] = useState<Attribution>(emptyAttribution);
+  const [attribution, setAttribution] = useState<CampaignAttributionData>(emptyAttribution);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setAttribution({
-      utm_source: params.get("utm_source"),
-      utm_medium: params.get("utm_medium"),
-      utm_campaign: params.get("utm_campaign"),
-      utm_content: params.get("utm_content"),
-    });
+    const currentHasCampaign = ["utm_source", "utm_medium", "utm_campaign", "utm_content"].some((key) => params.has(key));
+    const stored = readCampaignAttribution();
+
+    if (currentHasCampaign) {
+      setAttribution({
+        utm_source: params.get("utm_source"),
+        utm_medium: params.get("utm_medium"),
+        utm_campaign: params.get("utm_campaign"),
+        utm_content: params.get("utm_content"),
+        landing_url: window.location.href,
+        referrer: document.referrer || null,
+      });
+      return;
+    }
+
+    if (stored) setAttribution(stored);
   }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -67,8 +76,8 @@ export function EmployerInterestForm() {
         utm_medium: attribution.utm_medium,
         utm_campaign: attribution.utm_campaign,
         utm_content: attribution.utm_content,
-        landing_url: window.location.href,
-        referrer: document.referrer || null,
+        landing_url: attribution.landing_url ?? window.location.href,
+        referrer: attribution.referrer ?? document.referrer || null,
       });
 
       if (insertError) throw insertError;
