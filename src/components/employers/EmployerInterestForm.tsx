@@ -77,7 +77,7 @@ export function EmployerInterestForm() {
         utm_campaign: attribution.utm_campaign,
         utm_content: attribution.utm_content,
         landing_url: attribution.landing_url ?? window.location.href,
-        referrer: attribution.referrer ?? document.referrer || null,
+        referrer: attribution.referrer ?? (document.referrer || null),
       });
 
       if (insertError) throw insertError;
