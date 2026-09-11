@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 import { getSupabaseClient } from "@/lib/supabase-browser";
 
 const links = [
+  { href: "/candidates", label: "For Candidates" },
   { href: "/talent", label: "Browse Talent" },
-  { href: "/pitch/new", label: "Pitch a Role" },
+  { href: "/employers", label: "For Employers" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/about", label: "About" },
 ];
 
 export function Navbar() {
@@ -64,7 +64,7 @@ export function Navbar() {
           <span className="hidden text-[10px] font-semibold uppercase tracking-[0.12em] text-muted sm:inline">by Prime24 AI</span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-6 lg:flex">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -79,7 +79,7 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           {signedIn ? (
             <>
               <Link href="/dashboard/candidate" className="text-sm font-medium text-ink-soft transition-colors hover:text-ink">Dashboard</Link>
@@ -88,14 +88,14 @@ export function Navbar() {
           ) : (
             <>
               <Link href="/login" className="text-sm font-medium text-ink-soft transition-colors hover:text-ink">Log in</Link>
-              <Button href="/login" size="md">Create My Profile</Button>
+              <Button href="/candidates" size="md">Create Free Profile</Button>
             </>
           )}
         </div>
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md p-2 text-ink md:hidden"
+          className="inline-flex items-center justify-center rounded-md p-2 text-ink lg:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
@@ -105,7 +105,7 @@ export function Navbar() {
       </Container>
 
       {open && (
-        <div className="border-t border-line bg-paper md:hidden">
+        <div className="border-t border-line bg-paper lg:hidden">
           <Container className="flex flex-col gap-1 py-4">
             {links.map((link) => (
               <Link
@@ -117,6 +117,13 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/about"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-2 py-2.5 text-sm font-medium text-ink-soft hover:bg-ink/5 hover:text-ink"
+            >
+              About
+            </Link>
             <div className="mt-2 flex flex-col gap-2 border-t border-line pt-4">
               {signedIn ? (
                 <>
@@ -126,7 +133,7 @@ export function Navbar() {
               ) : (
                 <>
                   <Link href="/login" onClick={() => setOpen(false)} className="px-2 py-2 text-sm font-medium text-ink-soft">Log in</Link>
-                  <Button href="/login" className="w-full" onClick={() => setOpen(false)}>Create My Profile</Button>
+                  <Button href="/candidates" className="w-full" onClick={() => setOpen(false)}>Create Free Profile</Button>
                 </>
               )}
             </div>

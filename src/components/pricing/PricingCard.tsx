@@ -1,6 +1,5 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import type { PricingPlan } from "@/lib/pricing";
 
@@ -14,10 +13,7 @@ export function PricingCard({ plan }: { plan: PricingPlan }) {
           : "border-line bg-surface",
       )}
     >
-      <div className="flex items-center justify-between">
-        <h3 className="font-display text-lg font-medium">{plan.name}</h3>
-        {plan.highlighted && <Badge tone="accent">Most popular</Badge>}
-      </div>
+      <h3 className="font-display text-lg font-medium">{plan.name}</h3>
 
       <div className="mt-4 flex items-baseline gap-1">
         <span className="font-display text-3xl font-medium">{plan.price}</span>

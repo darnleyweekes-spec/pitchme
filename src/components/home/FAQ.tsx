@@ -11,7 +11,7 @@ const faqs = [
   {
     question: "Are the people in Browse Talent real?",
     answer:
-      "Yes. Browse Talent now shows only real PitchMe users who explicitly made their profile public. Illustrative examples elsewhere on the site are labeled as samples and are not mixed into live marketplace results.",
+      "Yes. Browse Talent shows only real PitchMe users who explicitly made their profile public. Illustrative examples elsewhere on the site are labeled as samples and are not mixed into live marketplace results.",
   },
   {
     question: "Can I stay private while employed?",
@@ -21,7 +21,7 @@ const faqs = [
   {
     question: "What happens after I mark a pitch as Interested?",
     answer:
-      "Your response is saved in your private dashboard. The current MVP does not yet provide a live employer response dashboard, so use the contact email included in the pitch to continue the conversation directly.",
+      "Your response is saved in your private dashboard. The employer contact email is included in the pitch so you can continue the conversation directly.",
   },
   {
     question: "What information does a company have to provide?",
@@ -31,7 +31,7 @@ const faqs = [
   {
     question: "What does it cost companies?",
     answer:
-      "Candidate browsing and role pitching are in early access. A founding-employer pilot is available for teams that want onboarding and direct support while employer accounts and billing automation are still being built.",
+      "The Founding Employer Pilot is $299/month and includes access to the live marketplace, structured role pitches, founding-employer onboarding, and priority support. Employers request access before billing begins.",
   },
 ];
 

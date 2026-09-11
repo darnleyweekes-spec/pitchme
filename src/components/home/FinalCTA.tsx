@@ -10,14 +10,14 @@ export function FinalCTA() {
           Put yourself where the right opportunity can find you.
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-ink-soft">
-          Create a concise profile, keep it private until you&apos;re ready, and opt into Browse Talent when you want to hear from employers.
+          Create a free profile, keep it private until you&apos;re ready, and choose when employers can make the first case for an opportunity.
         </p>
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button href="/dashboard/candidate" size="lg">
-            Create My Profile
+          <Button href="/candidates" size="lg">
+            Create Your Free Profile
             <ArrowRight size={18} />
           </Button>
-          <Button href="/talent" variant="secondary" size="lg">Browse Talent</Button>
+          <Button href="/employers" variant="secondary" size="lg">I&apos;m Hiring</Button>
         </div>
       </Container>
     </section>

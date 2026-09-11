@@ -5,7 +5,7 @@ const columns = [
   {
     heading: "For Candidates",
     links: [
-      { href: "/dashboard/candidate", label: "Create your profile" },
+      { href: "/candidates", label: "Create your profile" },
       { href: "/dashboard/candidate", label: "Candidate dashboard" },
       { href: "/#bill-of-rights", label: "Candidate Bill of Rights" },
     ],
@@ -13,9 +13,9 @@ const columns = [
   {
     heading: "For Employers",
     links: [
+      { href: "/employers", label: "Employer access" },
       { href: "/talent", label: "Browse talent" },
-      { href: "/pitch/new", label: "Send a pitch" },
-      { href: "/dashboard/employer", label: "Employer dashboard demo" },
+      { href: "/employers#apply", label: "Request founding access" },
     ],
   },
   {
@@ -36,7 +36,7 @@ export function Footer() {
           <div className="col-span-2 sm:col-span-1">
             <Link href="/" className="font-display text-xl font-semibold tracking-tight text-ink">PitchMe</Link>
             <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">by Prime24 AI</p>
-            <p className="mt-3 max-w-[24ch] text-sm leading-relaxed text-muted">Candidate-controlled reverse recruiting, currently in early access.</p>
+            <p className="mt-3 max-w-[24ch] text-sm leading-relaxed text-muted">Candidate-controlled reverse recruiting. Candidates choose visibility; employers make the first case.</p>
           </div>
 
           {columns.map((col) => (
@@ -54,7 +54,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-line pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} Prime24 AI. PitchMe is an early-access product.</p>
+          <p>&copy; {new Date().getFullYear()} Prime24 AI. PitchMe by Prime24 AI.</p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-ink">Privacy</Link>
             <Link href="/terms" className="hover:text-ink">Terms</Link>

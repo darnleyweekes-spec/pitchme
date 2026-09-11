@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Fraunces, Inter } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { CampaignAttribution } from "@/components/analytics/CampaignAttribution";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | PitchMe by Prime24 AI",
   },
   description:
-    "PitchMe by Prime24 AI is an early-access reverse-recruiting marketplace where candidates control public visibility and employers send structured role pitches.",
+    "PitchMe by Prime24 AI is a reverse-recruiting marketplace where candidates control public visibility and employers send structured role pitches with compensation and hiring details up front.",
   keywords: [
     "reverse recruiting",
     "candidate marketplace",
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
           strategy="beforeInteractive"
         />
+        <CampaignAttribution />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper"

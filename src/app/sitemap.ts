@@ -7,6 +7,8 @@ const siteUrl = "https://pitchme.prime24ai.com";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     "",
+    "/candidates",
+    "/employers",
     "/talent",
     "/pitch/new",
     "/pricing",
