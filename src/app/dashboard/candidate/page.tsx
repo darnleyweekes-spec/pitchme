@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { getSupabaseClient } from "@/lib/supabase-browser";
+import { readCampaignAttribution } from "@/components/analytics/CampaignAttribution";
 
 type Profile = {
   user_id: string;
@@ -67,6 +68,7 @@ export default function CandidateDashboardPage() {
 
         if (!profileData) {
           const metadata = user.user_metadata ?? {};
+          const attribution = readCampaignAttribution();
           const defaultName = metadata.full_name || metadata.name || user.email?.split("@")[0] || "New candidate";
           const created = await supabase
             .from("candidate_profiles")
@@ -78,6 +80,12 @@ export default function CandidateDashboardPage() {
               headline: "",
               is_public: false,
               open_to_offers: true,
+              signup_utm_source: attribution?.utm_source ?? null,
+              signup_utm_medium: attribution?.utm_medium ?? null,
+              signup_utm_campaign: attribution?.utm_campaign ?? null,
+              signup_utm_content: attribution?.utm_content ?? null,
+              signup_landing_url: attribution?.landing_url ?? null,
+              signup_referrer: attribution?.referrer ?? null,
             })
             .select(profileFields)
             .single();
