@@ -10,8 +10,9 @@ import { cn } from "@/lib/utils";
 import { getSupabaseClient } from "@/lib/supabase-browser";
 
 const links = [
+  { href: "/candidates", label: "For Candidates" },
   { href: "/talent", label: "Browse Talent" },
-  { href: "/pitch/new", label: "Pitch a Role" },
+  { href: "/employers", label: "For Employers" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
 ];
@@ -64,7 +65,7 @@ export function Navbar() {
           <span className="hidden text-[10px] font-semibold uppercase tracking-[0.12em] text-muted sm:inline">by Prime24 AI</span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-6 md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -88,7 +89,7 @@ export function Navbar() {
           ) : (
             <>
               <Link href="/login" className="text-sm font-medium text-ink-soft transition-colors hover:text-ink">Log in</Link>
-              <Button href="/login" size="md">Create My Profile</Button>
+              <Button href="/candidates" size="md">Create Free Profile</Button>
             </>
           )}
         </div>
@@ -126,7 +127,7 @@ export function Navbar() {
               ) : (
                 <>
                   <Link href="/login" onClick={() => setOpen(false)} className="px-2 py-2 text-sm font-medium text-ink-soft">Log in</Link>
-                  <Button href="/login" className="w-full" onClick={() => setOpen(false)}>Create My Profile</Button>
+                  <Button href="/candidates" className="w-full" onClick={() => setOpen(false)}>Create Free Profile</Button>
                 </>
               )}
             </div>
