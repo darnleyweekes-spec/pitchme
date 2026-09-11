@@ -7,7 +7,7 @@ import { pricingPlans } from "@/lib/pricing";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Free candidate profiles and a founding-employer pilot with manual onboarding while the employer product is in early access.",
+    "PitchMe is free for candidates. Employers can request the $299/month Founding Employer Pilot for live marketplace access, structured role pitches, onboarding, and support.",
 };
 
 const candidatePlans = pricingPlans.filter((plan) => plan.audience === "candidate");
@@ -20,19 +20,24 @@ const faqs = [
       "Candidates are the supply side of the marketplace, and the current product does not charge them to create, publish, or manage a profile.",
   },
   {
-    question: "What is the Founding Employer Pilot?",
+    question: "What does the Founding Employer Pilot include?",
     answer:
-      "It is the paid early-access option for teams that want to use the live talent marketplace and structured pitch flow with direct onboarding and support while employer accounts are still being completed.",
-  },
-  {
-    question: "Is employer billing automated yet?",
-    answer:
-      "Not yet. Pilot access is arranged directly. The site does not claim that automated subscriptions, quotas, team seats, or an employer response dashboard are live today.",
+      "The $299/month pilot includes access to the live talent marketplace, structured role pitches, direct candidate delivery, founding-employer onboarding, and priority support while the employer product continues to expand.",
   },
   {
     question: "What can employers use right now?",
     answer:
       "Employers can browse real opt-in profiles and send structured role pitches to candidates who are currently open to offers. Pitches appear in the candidate's private dashboard.",
+  },
+  {
+    question: "How does pilot onboarding work?",
+    answer:
+      "Submit the employer request form with your current hiring needs. PitchMe confirms fit and onboarding directly before any pilot billing begins.",
+  },
+  {
+    question: "What is still being built?",
+    answer:
+      "Employer account automation and additional employer workflow tools are still being expanded. The pricing page only presents marketplace and pitch capabilities that are available today as live features.",
   },
 ];
 
@@ -42,10 +47,10 @@ export default function PricingPage() {
       <div className="max-w-2xl">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-accent">Pricing</p>
         <h1 className="font-display text-3xl font-medium leading-[1.15] sm:text-4xl">
-          Free for candidates. Early access for employers.
+          Free for candidates. $299/month for founding employers.
         </h1>
         <p className="mt-4 text-base leading-relaxed text-ink-soft">
-          The pricing below reflects what is actually available now. Features that are still being built are not presented as live.
+          Start with the live marketplace today: candidate-controlled profiles, structured employer pitches, and direct candidate responses.
         </p>
       </div>
 
@@ -68,7 +73,7 @@ export default function PricingPage() {
       </div>
 
       <div className="mt-20 border-t border-line pt-14">
-        <SectionHeading eyebrow="Pricing FAQ" title="What is live versus early access." />
+        <SectionHeading eyebrow="Pricing FAQ" title="What you can use today." />
         <div className="mt-8 grid gap-8 sm:grid-cols-2">
           {faqs.map((faq) => (
             <div key={faq.question}>
