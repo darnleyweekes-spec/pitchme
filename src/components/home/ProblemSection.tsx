@@ -62,6 +62,16 @@ export function ProblemSection() {
             <p className="mt-6 border-t border-line pt-5 text-sm font-medium text-ink">The goal: make the opportunity clear before a candidate spends time pursuing it.</p>
           </div>
         </div>
+
+        <div className="mt-10 rounded-lg border border-accent/30 bg-accent-soft p-6 sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-accent">What buyers and candidates keep asking for</p>
+          <h3 className="mt-3 font-display text-2xl font-medium text-ink">Less ambiguity before the next step.</h3>
+          <div className="mt-5 grid gap-5 sm:grid-cols-3">
+            <div><p className="font-medium text-ink">Clear expectations</p><p className="mt-1 text-sm leading-relaxed text-ink-soft">Show compensation, process, timeline, and why the person was selected.</p></div>
+            <div><p className="font-medium text-ink">Real choice</p><p className="mt-1 text-sm leading-relaxed text-ink-soft">Keep profiles private by default and make Interested, Maybe, and Pass meaningful.</p></div>
+            <div><p className="font-medium text-ink">No wasted motion</p><p className="mt-1 text-sm leading-relaxed text-ink-soft">Let both sides decide whether the opportunity is worth a conversation before investing more time.</p></div>
+          </div>
+        </div>
       </Container>
     </section>
   );
