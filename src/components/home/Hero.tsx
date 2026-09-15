@@ -22,6 +22,9 @@ export function Hero() {
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
             Your profile starts private. Live marketplace results contain real, opted-in PitchMe users only. Fictional examples are labeled as samples.
           </p>
+          <p className="mt-4 max-w-xl rounded-md border border-accent/30 bg-accent-soft px-4 py-3 text-sm leading-relaxed text-ink-soft">
+            <span className="font-medium text-ink">The standard:</span> clear compensation, process, timeline, and decision criteria before a candidate invests more time.
+          </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Button href="/candidates" size="lg">
