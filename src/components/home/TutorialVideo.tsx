@@ -29,11 +29,11 @@ export function TutorialVideo() {
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
+            src="/tutorials/pitchme-employers-pitch-first.mp4"
             poster="/tutorials/pitchme-employers-pitch-first-poster.jpg"
             aria-label="PitchMe employer-first recruiting tutorial"
           >
-            <source src="/tutorials/pitchme-employers-pitch-first.mp4" type="video/mp4" />
             Your browser does not support embedded video.
           </video>
         </div>
