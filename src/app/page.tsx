@@ -8,11 +8,13 @@ import { BillOfRights } from "@/components/home/BillOfRights";
 import { PricingSection } from "@/components/home/PricingSection";
 import { FAQ } from "@/components/home/FAQ";
 import { FinalCTA } from "@/components/home/FinalCTA";
+import { TutorialVideo } from "@/components/home/TutorialVideo";
 
 export default function Home() {
   return (
     <>
       <Hero />
+      <TutorialVideo />
       <ProblemSection />
       <HowItWorks />
       <BenefitsSection />
