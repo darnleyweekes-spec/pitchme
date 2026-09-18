@@ -1,3 +1,5 @@
+"use client";
+
 import { Container } from "@/components/ui/Container";
 
 export function TutorialVideo() {
@@ -27,10 +29,13 @@ export function TutorialVideo() {
             controls
             autoPlay
             muted
+            defaultMuted
             loop
+            volume={0}
+            onCanPlay={(event) => { event.currentTarget.play().catch(() => {}); }}
             playsInline
             preload="auto"
-            src="/tutorials/pitchme-employers-pitch-first.mp4"
+            src="/tutorials/pitchme-employers-pitch-first.mp4?v=chrome2"
             poster="/tutorials/pitchme-employers-pitch-first-poster.jpg"
             aria-label="PitchMe employer-first recruiting tutorial"
           >
