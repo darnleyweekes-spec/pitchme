@@ -25,20 +25,16 @@ export function TutorialVideo() {
           <video
             className="aspect-video w-full rounded-lg border border-line bg-ink object-cover shadow-[0_18px_45px_rgba(20,20,26,0.14)]"
             controls
+            autoPlay
+            muted
             playsInline
             preload="metadata"
             poster="/tutorials/pitchme-employers-pitch-first-poster.jpg"
             aria-label="PitchMe employer-first recruiting tutorial"
           >
             <source src="/tutorials/pitchme-employers-pitch-first.mp4" type="video/mp4" />
-            Your browser does not support embedded video. Open the tutorial using the link below.
+            Your browser does not support embedded video.
           </video>
-          <a
-            className="mt-3 inline-block text-sm font-medium text-accent underline underline-offset-4"
-            href="/tutorials/pitchme-employers-pitch-first.mp4"
-          >
-            Open the tutorial video
-          </a>
         </div>
       </Container>
     </section>
