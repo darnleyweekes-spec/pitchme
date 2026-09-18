@@ -27,6 +27,7 @@ export function TutorialVideo() {
             controls
             autoPlay
             muted
+            loop
             playsInline
             preload="metadata"
             poster="/tutorials/pitchme-employers-pitch-first-poster.jpg"
