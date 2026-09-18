@@ -1,6 +1,7 @@
 import { X, Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { NextSection } from "@/components/home/NextSection";
 
 const traditionalSteps = [
   "Find a job listing",
@@ -21,7 +22,7 @@ const pitchmeSteps = [
 
 export function ProblemSection() {
   return (
-    <section className="border-b border-line bg-surface">
+    <section id="problem" className="scroll-mt-20 border-b border-line bg-surface">
       <Container className="py-16 sm:py-20">
         <SectionHeading
           eyebrow="The problem"
@@ -72,6 +73,7 @@ export function ProblemSection() {
             <div><p className="font-medium text-ink">No wasted motion</p><p className="mt-1 text-sm leading-relaxed text-ink-soft">Let both sides decide whether the opportunity is worth a conversation before investing more time.</p></div>
           </div>
         </div>
+        <NextSection href="#how-it-works" label="See how it works" />
       </Container>
     </section>
   );

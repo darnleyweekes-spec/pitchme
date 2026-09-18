@@ -2,12 +2,13 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PitchCard } from "@/components/pitch/PitchCard";
 import { pitches } from "@/lib/data";
+import { NextSection } from "@/components/home/NextSection";
 
 const example = pitches.find((p) => p.id === "pitch-1")!;
 
 export function ExamplePitch() {
   return (
-    <section className="border-b border-line">
+    <section id="example-pitch" className="scroll-mt-20 border-b border-line">
       <Container className="py-16 sm:py-20">
         <SectionHeading
           eyebrow="Illustrative sample"
@@ -39,6 +40,7 @@ export function ExamplePitch() {
             }
           />
         </div>
+        <NextSection href="#bill-of-rights" label="Review candidate protections" />
       </Container>
     </section>
   );

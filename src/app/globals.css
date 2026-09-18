@@ -39,6 +39,21 @@ body {
   color: var(--color-ink);
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+section {
+  scroll-margin-top: 80px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-paper: #101012;

@@ -2,10 +2,11 @@ import { ArrowRight, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Avatar } from "@/components/ui/Avatar";
+import { NextSection } from "@/components/home/NextSection";
 
 export function Hero() {
   return (
-    <section className="border-b border-line">
+    <section id="overview" className="scroll-mt-20 border-b border-line">
       <Container className="grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-28">
         <div>
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 text-xs font-medium uppercase tracking-[0.1em] text-ink-soft">
@@ -72,6 +73,7 @@ export function Hero() {
             </div>
           </div>
         </div>
+        <div className="lg:col-span-2"><NextSection href="#problem" label="See the problem" /></div>
       </Container>
     </section>
   );

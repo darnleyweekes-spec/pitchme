@@ -6,7 +6,7 @@ import { pricingPlans } from "@/lib/pricing";
 
 export function PricingSection() {
   return (
-    <section className="border-b border-line bg-surface">
+    <section id="pricing" className="scroll-mt-20 border-b border-line bg-surface">
       <Container className="py-16 sm:py-20">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <SectionHeading

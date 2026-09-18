@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { NextSection } from "@/components/home/NextSection";
 
 const rights = [
   "Your profile starts private and only becomes public when you opt in.",
@@ -31,6 +32,7 @@ export function BillOfRights() {
             </li>
           ))}
         </ol>
+        <NextSection href="#pricing" label="View pricing" />
       </Container>
     </section>
   );

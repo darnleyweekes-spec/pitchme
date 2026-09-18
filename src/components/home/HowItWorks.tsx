@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { NextSection } from "@/components/home/NextSection";
 
 const steps = [
   {
@@ -30,7 +31,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="border-b border-line">
+    <section id="how-it-works" className="scroll-mt-20 border-b border-line">
       <Container className="py-16 sm:py-20">
         <SectionHeading
           eyebrow="How it works"
@@ -46,6 +47,7 @@ export function HowItWorks() {
             </div>
           ))}
         </div>
+        <NextSection href="#example-pitch" label="See an example pitch" />
       </Container>
     </section>
   );
