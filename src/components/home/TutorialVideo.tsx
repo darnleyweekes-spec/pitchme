@@ -1,8 +1,21 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { Container } from "@/components/ui/Container";
 
 export function TutorialVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [soundOn, setSoundOn] = useState(false);
+
+  function enableSound() {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
+    video.volume = 1;
+    void video.play();
+    setSoundOn(true);
+  }
+
   return (
     <section id="tutorial" className="scroll-mt-20 border-b border-line bg-surface">
       <Container className="grid gap-8 py-14 sm:py-16 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-12 lg:py-20">
@@ -25,22 +38,28 @@ export function TutorialVideo() {
 
         <div className="min-w-0">
           <video
+            ref={videoRef}
             className="aspect-video w-full rounded-lg border border-line bg-ink object-cover shadow-[0_18px_45px_rgba(20,20,26,0.14)]"
             controls
             autoPlay
             muted
-            defaultMuted
-            loop
-            volume={0}
-            onCanPlay={(event) => { event.currentTarget.play().catch(() => {}); }}
             playsInline
-            preload="auto"
-            src="/tutorials/pitchme-employers-pitch-first.mp4?v=chrome2"
+            preload="metadata"
             poster="/tutorials/pitchme-employers-pitch-first-poster.jpg"
             aria-label="PitchMe employer-first recruiting tutorial"
           >
+            <source src="/tutorials/pitchme-employers-pitch-first.mp4" type="video/mp4" />
             Your browser does not support embedded video.
           </video>
+          {!soundOn && (
+            <button
+              type="button"
+              onClick={enableSound}
+              className="mt-3 rounded-full border border-line bg-paper px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface"
+            >
+              Play with sound
+            </button>
+          )}
         </div>
       </Container>
     </section>
