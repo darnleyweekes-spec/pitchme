@@ -25,8 +25,6 @@ export function TutorialVideo() {
           <video
             className="aspect-video w-full rounded-lg border border-line bg-ink object-cover shadow-[0_18px_45px_rgba(20,20,26,0.14)]"
             controls
-            autoPlay
-            muted
             playsInline
             preload="metadata"
             poster="/tutorials/pitchme-employers-pitch-first-poster.jpg"
