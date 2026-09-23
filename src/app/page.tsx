@@ -18,10 +18,10 @@ export default function Home() {
       <ProblemSection />
       <HowItWorks />
       <BenefitsSection />
+      <PricingSection />
       <EmployerComparison />
       <ExamplePitch />
       <BillOfRights />
-      <PricingSection />
       <FAQ />
       <FinalCTA />
     </>
