@@ -12,7 +12,6 @@ export function TalentBrowser() {
   const [openOnly, setOpenOnly] = useState(false);
   const [candidates, setCandidates] = useState<PublicCandidateProfile[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -29,7 +28,11 @@ export function TalentBrowser() {
         if (!cancelled) setCandidates((data ?? []) as PublicCandidateProfile[]);
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Unable to load public candidate profiles.");
+          // Keep the public marketplace usable when the optional public view is
+          // unavailable. An empty state is accurate and gives candidates a clear
+          // next step without exposing a backend error to visitors.
+          console.error("Unable to load public candidate profiles", err);
+          setCandidates([]);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -58,14 +61,6 @@ export function TalentBrowser() {
 
   if (loading) {
     return <p className="text-sm text-ink-soft">Loading public profiles…</p>;
-  }
-
-  if (error) {
-    return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-5 text-sm text-red-800">
-        {error}
-      </div>
-    );
   }
 
   return (
