@@ -8,6 +8,7 @@ export interface PricingPlan {
   features: string[];
   cta: string;
   href: string;
+  paypalHref?: string;
   highlighted?: boolean;
 }
 
@@ -45,6 +46,7 @@ export const pricingPlans: PricingPlan[] = [
     ],
     cta: "Request Founding Access",
     href: "/employers#apply",
+    paypalHref: "https://www.paypal.com/ncp/payment/UQSKW6KRX5J3A",
     highlighted: true,
   },
 ];
