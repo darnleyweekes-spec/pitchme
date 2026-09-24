@@ -67,6 +67,17 @@ export function PricingCard({ plan }: { plan: PricingPlan }) {
       >
         {plan.cta}
       </Button>
+      {plan.stripeHref && (
+        <Button
+          href={plan.stripeHref}
+          variant="secondary"
+          className="mt-3 w-full"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Pay with Stripe after approval
+        </Button>
+      )}
       {plan.paypalHref && (
         <Button
           href={plan.paypalHref}
