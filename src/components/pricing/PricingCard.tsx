@@ -67,6 +67,17 @@ export function PricingCard({ plan }: { plan: PricingPlan }) {
       >
         {plan.cta}
       </Button>
+      {plan.paypalHref && (
+        <Button
+          href={plan.paypalHref}
+          variant="secondary"
+          className="mt-3 w-full"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Pay with PayPal after approval
+        </Button>
+      )}
     </div>
   );
 }
